@@ -1,0 +1,325 @@
+[
+    {
+        "id": 1,
+        "title": "Dayı Dönər",
+        "discount_amount": "10%",
+        "desciption": "Tələbə kartınızı təqdim edin və bütün sifarişləriniz üçün 10% endirim əldə edin. Həftənin hər günü keçərlidir.",
+        "sub-description": "Sifarişlərə 10% endirim!",
+        "rating": "5.0",
+        "reviews": "(128)",
+        "category": "yemək",
+        "locations": ["Bakı, Nizami"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə kartı təqdim olunur"],
+        "image_url": "https://images.unsplash.com/photo-1596995804697-27d11d43652e?w=500&auto=format&fit=crop&q=60",
+        "map_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2536.535538392832!2d49.824817975148086!3d40.38460785759507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307deb0e11bec7%3A0x26204c2b5ad8c10c!2zRGF5xLEgRMO2bsmZcg!5e1!3m2!1str!2saz!4v1753259661527!5m2!1str!2saz",
+        "key_words": ["dönər", "yemək", "tələbə"],
+        "contact_info": [
+    { "type": "phone", "value": "+994 12 555 55 55" },
+    { "type": "website", "value": "https://example.com" },
+    { "type": "email", "value": "info@example.com" },
+    { "type": "instagram", "value": "@username" }
+]
+      },
+      {
+        "id": 2,
+        "title": "Greyder",
+        "discount_amount": "5%",
+        "desciption": "Rahatlıq və modanı bir arada yaşayın! Park Bulvar mağazamızdan Greyder-in keyfiyyətli və dəbli ayaqqabı kolleksiyasını endirimlə seçin. Tələbələrə xüsusi təkliflər mövcuddur.",
+        "sub-description": "İstədiyin ayaqqabını seç, endirimlə əldə et.",
+        "rating": 4.8,
+        "reviews": "(128)",
+        "category": "geyim",
+        "locations": ["Park Bulvar"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə+ kartı tələb olunur"],
+        "image_url": "public\\data\\images\\Greyder.avif",
+        "map_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2537.0575179315256!2d49.84712447514731!3d40.37074445843825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307dad090d9181%3A0x2b88981f2bd87785!2sPark%20Bulvar!5e1!3m2!1str!2saz!4v1753453217471!5m2!1str!2saz"
+      },
+      {
+        "id": 3,
+        "title": "Mavi",
+        "discount_amount": "5%",
+        "desciption": "Proqramlaşdırma və dizayn kurslarına 30% tələbə endirimi. Onlayn və əyani seçimlər mövcuddur.",
+        "sub-description": "Kurslara 30% endirim!",
+        "rating": 4.7,
+        "reviews": "(128)",
+        "category": "geyim",
+        "locations": ["Park Bulvar"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə+ kartı tələb olunur"],
+        "image_url": "public\\data\\images\\Mavi.avif",
+        "map_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2537.0575179315256!2d49.84712447514731!3d40.37074445843825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307dad090d9181%3A0x2b88981f2bd87785!2sPark%20Bulvar!5e1!3m2!1str!2saz!4v1753453217471!5m2!1str!2saz",
+        "key_words": ["təhsil", "kurs", "təlim", "online"]
+      },
+      {
+        "id": 4,
+        "title": "INNAB Business School",
+        "discount_amount": "5%",
+        "desciption": "INNAB Business School tələbələr üçün peşəkar bacarıqların inkişafına yönəlmiş keyfiyyətli təhsil imkanları təqdim edir. TələbəPlus kartı sahibləri üçün bütün təlim və kurslara 5% endirim mövcuddur. Excel, maliyyə, data analizi və daha çox sahəni əhatə edən proqramlarla karyerana güclü bir addım at!",
+        "sub-description": "Rəqəmsal bacarıqları inkişaf etdirmək üçün fürsəti qaçırma.",
+        "rating": 4.5,
+        "reviews": "(128)",
+        "category": "təhsil",
+        "locations": ["Gənclik"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə+ kartı tələb olunur"],
+        "image_url": "public\\data\\images\\INNABbusinessschool.jpg",
+        "map_url": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4030.5692797970987!2d49.854651274376785!3d40.40174462950292!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d9beedfbb45%3A0x901b794894c03182!2s%C4%B0nnab%20Business%20School!5e1!3m2!1str!2saz!4v1753560148139!5m2!1str!2saz",
+        "key_words": ["kofe", "qəhvə", "tələbə"]
+      },
+      {
+        "id": 5,
+        "title": "CinemaPlus",
+        "discount_amount": "40%",
+        "desciption": "Hər hətənin çərşənbə axşamı tələbələr üçün bütün filmlərə 40% endirim. Tələbə kartınızı təqdim edin.",
+        "sub-description": "Çərşənbə axşamı filmlərə endirim!",
+        "rating": 4.6,
+        "reviews": "(128)",
+        "category": "əyləncə",
+        "locations": ["Bakı, Gənclik Mall", "Bakı, 28 Mall"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə kartı təqdim olunur", "Çərşənbə axşamı günləri keçərlidir"],
+        "image_url": "https://images.unsplash.com/photo-1598899134739-47cae164c5f9?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": ["film", "kino", "əyləncə", "tələbə"]
+      },
+      {
+        "id": 6,
+        "title": "Barista Coffee",
+        "discount_amount": "10%",
+        "desciption": "Barista Coffee-də tələbələr üçün bütün içkilərə 10% endirim. Tələbə bileti təqdim olunmalıdır.",
+        "sub-description": "İçkilərə 10% endirim!",
+        "rating": 4.4,
+        "reviews": "(128)",
+        "category": "kofe",
+        "locations": ["Bakı, Nəsimi"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə bileti təqdim olunur"],
+        "image_url": "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": ["kofe", "tələbə", "endirim", "barista"]
+      },
+      {
+        "id": 7,
+        "title": "TechClass",
+        "discount_amount": "25%",
+        "desciption": "Front-end və back-end kurslarında 25% endirim. Tələbə bileti təqdim etmək kifayətdir.",
+        "sub-description": "İT kurslarına 25% endirim!",
+        "rating": 4.9,
+        "reviews": "(128)",
+        "category": "təhsil",
+        "locations": ["Onlayn"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə bileti təqdim olunur"],
+        "image_url": "https://images.unsplash.com/photo-1537432376769-00a0035f1eeb?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": ["təhsil", "programming", "kurs", "developer"]
+      },
+      {
+        "id": 8,
+        "title": "ModaTime",
+        "discount_amount": "18%",
+        "desciption": "Tələbə bileti ilə alış-veriş zamanı 18% endirim fürsəti. Sezon sonu endirimlərinə əlavə olaraq tətbiq olunmur.",
+        "sub-description": "Geyimə 18% tələbə endirimi!",
+        "rating": 4.2,
+        "reviews": "(128)",
+        "category": "geyim",
+        "locations": ["Bakı, Port Baku Mall"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə bileti təqdim olunur"],
+        "image_url": "https://images.unsplash.com/photo-1495020689067-958852a7765e?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": ["moda", "geyim", "tələbə", "endirim"]
+      },
+      {
+        "id": 9,
+        "title": "EDU Masters",
+        "discount_amount": "50%",
+        "desciption": "Tələbələr üçün xüsusi hazırlıq proqramlarına 50% endirim. Qeydiyyat üçün tələbə kartı şərtdir.",
+        "sub-description": "Hazırlıqlara 50% tələbə endirimi!",
+        "rating": 4.7,
+        "reviews": "(128)",
+        "category": "təhsil",
+        "locations": ["Bakı, Xətai"],
+        "valid_from_until": ["2025-07-20", "2025-07-27"],
+        "requirements": ["Tələbə kartı təqdim olunur"],
+        "image_url": "https://images.unsplash.com/photo-1603570419988-7b39db44f06e?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": ["təhsil", "hazırlıq", "kurs", "endirim"]
+      },
+      {
+        "id": 10,
+        "title": "Krispy Kreme",
+        "discount_amount": "15%",
+        "desciption": "Krispy Kreme-də tələbələr üçün 15% endirim! Tələbə bileti təqdim etməklə istifadə edilə bilər.",
+        "sub-description": "İstənilən şirniyyat və içkilərə şamil olunur.",
+        "rating": "5.0",
+        "reviews": "(128)",
+        "category": "kofe",
+        "locations": [
+          "Port Baku",
+          "Gənclik Mall"
+        ],
+        "valid_from_until": [
+          "2025-07-20",
+          "2025-08-31"
+        ],
+        "requirements": [
+          "Tələbə bileti təqdim olunur"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1586985289688-3d2121d6b04b?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": [
+          "donut",
+          "şirniyyat",
+          "kofe",
+          "tələbə"
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Mado",
+        "discount_amount": "10%",
+        "desciption": "Mado restoranlarında tələbələr üçün 10% endirim! Tələbə bileti təqdim etməklə istifadə edilə bilər.",
+        "sub-description": "Bütün menyu üçün keçərlidir.",
+        "rating": 4,
+        "reviews": "(128)",
+        "category": "yemək",
+        "locations": [
+          "Bakı, Nizami",
+          "28 Mall"
+        ],
+        "valid_from_until": [
+          "2025-07-20",
+          "2025-08-31"
+        ],
+        "requirements": [
+          "Tələbə bileti təqdim olunur"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": [
+          "restoran",
+          "dondurma",
+          "tələbə",
+          "yemək"
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Bravo Market",
+        "discount_amount": "5%",
+        "desciption": "Bravo Marketlərdə tələbə bileti təqdim etməklə 5% endirim əldə edin.",
+        "sub-description": "Yalnız seçilmiş məhsullara şamil olunur.",
+        "rating": 3,
+        "reviews": "(128)",
+        "category": "yemək",
+        "locations": [
+          "Bakı və regionlar"
+        ],
+        "valid_from_until": [
+          "2025-07-20",
+          "2025-08-31"
+        ],
+        "requirements": [
+          "Tələbə bileti təqdim olunur"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1586864381141-8783f0c16f2e?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": [
+          "market",
+          "endirim",
+          "tələbə",
+          "ərzaq"
+        ]
+      },
+      {
+        "id": 13,
+        "title": "CinemaPlus Ganjlik",
+        "discount_amount": "50%",
+        "desciption": "CinemaPlus Ganjlik-də tələbələr üçün 50% endirim! Seanslardan əvvəl tələbə bileti təqdim etməklə istifadə edilə bilər.",
+        "sub-description": "Yalnız həftə içi seanslara şamil olunur.",
+        "rating": 4,
+        "reviews": "(128)",
+        "category": "eylence",
+        "locations": [
+          "Bakı, Gənclik Mall"
+        ],
+        "valid_from_until": [
+          "2025-07-20",
+          "2025-08-31"
+        ],
+        "requirements": [
+          "Tələbə bileti təqdim olunur",
+          "Yalnız həftə içi"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1581905764498-41059b3a607a?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": [
+          "kino",
+          "film",
+          "eylence",
+          "tələbə",
+          "bilet"
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Starbucks",
+        "discount_amount": "10%",
+        "desciption": "Starbucks filiallarında tələbə bileti ilə 10% endirimdən yararlanın.",
+        "sub-description": "Seçilmiş içkilərə şamil olunur.",
+        "rating": 4,
+        "reviews": "(128)",
+        "category": "kofe",
+        "locations": [
+          "Bakı, Fəvvarələr Meydanı",
+          "Port Baku"
+        ],
+        "valid_from_until": [
+          "2025-07-20",
+          "2025-08-31"
+        ],
+        "requirements": [
+          "Tələbə bileti təqdim olunur"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": [
+          "kofe",
+          "starbucks",
+          "tələbə",
+          "içki"
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Zara",
+        "discount_amount": "10%",
+        "desciption": "Zara mağazalarında tələbə bileti ilə 10% endirim qazanın.",
+        "sub-description": "Yalnız geyim məhsullarına aiddir.",
+        "rating": 4,
+        "reviews": "(128)",
+        "category": "geyim",
+        "locations": [
+          "28 Mall",
+          "Gənclik Mall"
+        ],
+        "valid_from_until": [
+          "2025-07-20",
+          "2025-08-31"
+        ],
+        "requirements": [
+          "Tələbə bileti təqdim olunur"
+        ],
+        "image_url": "https://images.unsplash.com/photo-1521334884684-d80222895322?w=500&auto=format&fit=crop&q=60",
+        "map_url": "",
+        "key_words": [
+          "moda",
+          "geyim",
+          "tələbə",
+          "zara"
+        ]
+      }
+]
