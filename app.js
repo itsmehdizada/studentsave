@@ -1,4 +1,7 @@
-// Security utility functions
+// ============================================================================
+// SECURITY UTILITY FUNCTIONS
+// ============================================================================
+
 function sanitizeText(text) {
     if (!text) return '';
     const div = document.createElement('div');
@@ -22,25 +25,32 @@ function createSecureElement(tagName, textContent = '', className = '') {
     return element;
 }
 
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
 // Initialize Lucide icons
 lucide.createIcons();
 
-// Search functionality
+// ============================================================================
+// SEARCH FUNCTIONALITY
+// ============================================================================
+
 const searchInput = document.querySelector('.search-container input');
 const searchButton = document.querySelector('.search-button');
 
 function handleSearch() {
     const allDiscountsButton = document.querySelector('.filter-bubble[data-filter="all"]');
-if (allDiscountsButton) {
-    allDiscountsButton.classList.remove('active');
-}
+    if (allDiscountsButton) {
+        allDiscountsButton.classList.remove('active');
+    }
+    
     const searchTerm = searchInput.value.trim();
     if (searchTerm) {
-        // Handle search - for now just console log
         console.log('Searching for:', searchTerm);
     }
 
-    // Add scrolling at the end
+    // Scroll to discounts section
     const discountsSection = document.getElementById('discounts');
     if (discountsSection) {
         discountsSection.scrollIntoView({ 
@@ -64,9 +74,8 @@ if (searchInput) {
     });
 }
 
-// Mobile search icon click - using event delegation (works reliably)
+// Mobile search icon click - using event delegation
 document.body.addEventListener('click', (e) => {
-    // Check if clicked element is the search icon
     if (e.target.classList.contains('search-icon') || 
         e.target.id === 'search-icon' ||
         e.target.closest('.search-icon') ||
@@ -77,14 +86,17 @@ document.body.addEventListener('click', (e) => {
             console.log('Mobile search - icon clicked');
             handleSearch();
         }
-        // On desktop (>480px), this icon is just decorative, so do nothing
     }
 });
 
-// Function to create star rating HTML - SECURED
+// ============================================================================
+// UTILITY FUNCTIONS FOR UI COMPONENTS
+// ============================================================================
+
+// Star rating HTML generator - SECURED
 function createStarRating(rating) {
     const stars = [];
-    const numRating = parseFloat(rating) || 0; // Sanitize rating input
+    const numRating = parseFloat(rating) || 0;
     
     for (let i = 1; i <= 5; i++) {
         if (numRating >= i) {
@@ -96,7 +108,51 @@ function createStarRating(rating) {
     return stars.join('');
 }
 
+// Category icon mapping
+function getCategoryIcon(category) {
+    const icons = {
+        geyim: "shopping-bag",
+        idman: "dumbbell",
+        kofe: "coffee",
+        kitab: "book-open",
+        texnologiya: "laptop",
+        tehsil: "school",
+        yemək: "hamburger",
+        digər: "list"
+    };
+    return icons[category.toLowerCase()] || "tag";
+}
+
+// Category CSS class mapping
+function getCategoryClass(category) {
+    const classes = {
+        "geyim": "geyim",
+        "idman": "idman",
+        "kofe": "kofe",
+        "kitab": "kitab",
+        "texnologiya": "texnologiya",
+        "təhsil": "tehsil",
+        "yemək": "yemek",
+        "əyləncə": "eylence",
+        "digər": "diger"
+    };
+    return classes[category.toLowerCase()] || "default-category";
+}
+
+function capitalize(str) {
+    return sanitizeText(str).charAt(0).toUpperCase() + sanitizeText(str).slice(1);
+}
+
+// ============================================================================
+// MAIN DOM CONTENT LOADED EVENT
+// ============================================================================
+
 document.addEventListener('DOMContentLoaded', function () {
+    
+    // ========================================================================
+    // HAMBURGER MENU
+    // ========================================================================
+    
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const mobileMenu = document.getElementById('mobileMenu');
   
@@ -112,30 +168,59 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ========================================================================
+    // RATING STARS INITIALIZATION
+    // ========================================================================
+    
     document.querySelectorAll('.rating[data-rating]').forEach(function(ratingEl) {
         const rating = parseFloat(ratingEl.getAttribute('data-rating'));
         ratingEl.innerHTML = createStarRating(rating);
     });
-    lucide.createIcons(); // re-render icons
+    lucide.createIcons();
 
-    // Filter state management
-const filterState = {
-    sort: 'null',
-    location: 'all',
-};
+    // ========================================================================
+    // FILTER STATE MANAGEMENT
+    // ========================================================================
+    
+    const filterState = {
+        sort: 'null',
+        location: 'all',
+    };
 
-// Function to apply filters to your existing discounts
+    function initializeDefaultSort() {
+        // Set default sort to highest-discount
+        if (!filterState.sort) {
+            filterState.sort = 'highest-discount';
+        }
+        
+        // Set the sort dropdown to show highest-discount as selected
+        if (sortSelect) {
+            const highestDiscountOption = sortSelect.querySelector('option[value="highest-discount"]');
+            if (highestDiscountOption) {
+                sortSelect.value = 'highest-discount';
+            }
+        }
+        
+        // Apply the default sorting
+        applyDiscountFilters();
+    }
+
+// ========================================================================
+// FILTER FUNCTIONS
+// ========================================================================
+
 function applyDiscountFilters() {
     const allDiscountsButton = document.querySelector('.filter-bubble[data-filter="all"]');
-if (allDiscountsButton) {
-    allDiscountsButton.classList.remove('active');
-}
+    if (allDiscountsButton) {
+        allDiscountsButton.classList.remove('active');
+    }
+    
     // Start with the base filtered discounts (from search/category)
-    // Need to re-apply category and search filters first
     let discountsToShow = allDiscounts.filter(discount => {
         const matchesCategory = !selectedCategory || discount.category === selectedCategory;
         const matchesSearch = !searchTerm ||
             discount.title.toLowerCase().includes(searchTerm) ||
+            discount.location.toLowerCase().includes(searchTerm) ||
             (discount.keywords && discount.keywords.some(k => k.toLowerCase().includes(searchTerm)));
         return matchesCategory && matchesSearch;
     });
@@ -146,94 +231,57 @@ if (allDiscountsButton) {
             const location = discount.location.toLowerCase();
             const filterLocation = filterState.location.toLowerCase();
             
-            // Check for different location formats
             return location.includes(filterLocation) || 
                    location.includes(filterLocation.replace('mts', '').trim()) ||
                    location.includes(filterLocation.replace('.', '').trim());
         });
     }
 
-    // Apply sorting only if a sort filter is selected
-    if (filterState.sort) {
-        discountsToShow.sort((a, b) => {
-            switch (filterState.sort) {
-                case 'highest-discount':
-                    const discountA = parseFloat(a.discount_amount.replace('%', ''));
-                    const discountB = parseFloat(b.discount_amount.replace('%', ''));
-                    return discountB - discountA;
-                    
-                case 'highest-rating':
-                    return parseFloat(b.rating) - parseFloat(a.rating);
-                    
-                default:
-                    return 0;
-            }
-        });
-    }
+    // Apply sorting - DEFAULT TO HIGHEST DISCOUNT if no sort is set
+    const sortMethod = filterState.sort || 'highest-discount';
+    discountsToShow.sort((a, b) => {
+        switch (sortMethod) {
+            case 'highest-discount':
+                const discountA = parseFloat(a.discount_amount.replace('%', ''));
+                const discountB = parseFloat(b.discount_amount.replace('%', ''));
+                return discountB - discountA;
+                
+            case 'highest-rating':
+                return parseFloat(b.rating) - parseFloat(a.rating);
+                
+            default:
+                // Default case also sorts by highest discount
+                const defaultDiscountA = parseFloat(a.discount_amount.replace('%', ''));
+                const defaultDiscountB = parseFloat(b.discount_amount.replace('%', ''));
+                return defaultDiscountB - defaultDiscountA;
+        }
+    });
 
     // Update the global filteredDiscounts array
     filteredDiscounts = discountsToShow;
-    
-    // Reset visible count and re-render
     visibleCount = 3;
     renderDiscounts();
     
-    console.log(`Filtered discounts: ${discountsToShow.length} results for location: ${filterState.location}, sort: ${filterState.sort}`);
-}
-
-// Desktop filter integration (enhanced version)
-const sortSelect = document.getElementById('sort');
-const regionSelect = document.getElementById('region');
-
-if (sortSelect) {
-    sortSelect.addEventListener('change', function() {
-        // Remove active from "Bütün endirimlar" button when desktop filter is used
-        const allDiscountsButton = document.querySelector('.filter-bubble[data-filter="all"]');
-        if (allDiscountsButton) {
-            allDiscountsButton.classList.remove('active');
-        }
-        
-        filterState.sort = this.value;
-        applyDiscountFilters();
-    });
-}
-
-if (regionSelect) {
-    regionSelect.addEventListener('change', function() {
-        // Check if "Hamısı" (All) option is selected
-        if (this.value === 'all' || this.value === 'hamısı' || this.value === '') {
-            clearAllFilters();
-            return;
-        }
-        // Remove active from "Bütün endirimlar" button when desktop filter is used
-        const allDiscountsButton = document.querySelector('.filter-bubble[data-filter="all"]');
-        if (allDiscountsButton) {
-            allDiscountsButton.classList.remove('active');
-        }
-        
-        // Map desktop dropdown values to mobile filter values
-        const locationMap = {
-            'nizami': 'nizami',
-            '28-may': '28 may',
-            'nasimi': 'nəsimi',
-            'narimanov': 'nərimanov',
-            'all': 'all'
-        };
-        
-        filterState.location = locationMap[this.value] || this.value;
-        applyDiscountFilters();
-    });
+    console.log(`Filtered discounts: ${discountsToShow.length} results for location: ${filterState.location}, sort: ${sortMethod}`);
 }
 
 function clearAllFilters() {
-    // Reset all filter states
-    filterState.sort = null;
+    // Reset all filter states - but keep highest-discount as default sort
+    filterState.sort = 'highest-discount'; // Changed from null to default sort
     filterState.location = 'all';
     selectedCategory = '';
     searchTerm = '';
     
-    // Reset desktop dropdowns
-    if (sortSelect) sortSelect.selectedIndex = 0;
+    // Reset desktop dropdowns - set sort dropdown to highest-discount option
+    if (sortSelect) {
+        // Find and select the highest-discount option
+        const highestDiscountOption = sortSelect.querySelector('option[value="highest-discount"]');
+        if (highestDiscountOption) {
+            sortSelect.value = 'highest-discount';
+        } else {
+            sortSelect.selectedIndex = 1; // Assuming highest-discount is the second option (index 1)
+        }
+    }
     if (regionSelect) regionSelect.selectedIndex = 0;
     
     // Clear search input
@@ -251,117 +299,47 @@ function clearAllFilters() {
         allDiscountsButton.classList.add('active');
     }
     
-    // Reset to show all discounts
+    // Reset to show all discounts with default sorting applied
     filteredDiscounts = [...allDiscounts];
     visibleCount = 3;
-    renderDiscounts();
+    applyDiscountFilters(); // Apply filters to ensure default sorting is applied
     
-    console.log('All filters cleared from desktop');
+    console.log('All filters cleared - default sort (highest-discount) applied');
 }
 
-// --- Updated Mobile filter bubbles logic ---//
-document.querySelectorAll('.filter-bubble:not(.has-dropdown)').forEach(bubble => {
-    bubble.addEventListener('click', function() {
-        // Remove active class from non-dropdown bubbles
-        document.querySelectorAll('.filter-bubble:not(.has-dropdown)').forEach(b => b.classList.remove('active'));
-        // Add active class to clicked bubble
-        this.classList.add('active');
-        
-        // Update filter state
-        const filterType = this.getAttribute('data-filter');
-        filterState.sort = filterType;
-        
-        // Apply filters
-        applyDiscountFilters();
-        
-        console.log('Filter selected:', filterType);
-    });
-});
-
-// Handle "Bütün endirimlar" - clear all filters
-document.querySelectorAll('.filter-bubble').forEach(bubble => {
-    const filterType = bubble.getAttribute('data-filter');
+    // ========================================================================
+    // DESKTOP FILTER INTEGRATION
+    // ========================================================================
     
-    if (filterType === 'all' || bubble.textContent.trim() === 'Bütün endirimlar') {
-        bubble.addEventListener('click', function() {
-            // Clear all filter states
-            filterState.sort = null;
-            filterState.location = 'all';
-            selectedCategory = '';
-            searchTerm = '';
-            
-            // Clear search input
-            if (searchInput) {
-                searchInput.value = '';
+    const sortSelect = document.getElementById('sort');
+    const regionSelect = document.getElementById('region');
+
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            const allDiscountsButton = document.querySelector('.filter-bubble[data-filter="all"]');
+            if (allDiscountsButton) {
+                allDiscountsButton.classList.remove('active');
             }
             
-            // Remove active class from all filter elements
-            document.querySelectorAll('.filter-bubble').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.category-item').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
-            
-            // Set "Bütün ərazilər" as selected in dropdown
-            const allAreasItem = document.querySelector('.dropdown-item[data-value="all"]');
-            if (allAreasItem) {
-                allAreasItem.classList.add('selected');
-                
-                // Reset dropdown bubble text
-                const bubbleTextNode = dropdownBubble.firstChild;
-                bubbleTextNode.textContent = 'Məkan ';
-            }
-            
-            // Add active class to this button
-            this.classList.add('active');
-            
-            // Reset to show all discounts
-            filteredDiscounts = [...allDiscounts];
-            visibleCount = 3;
-            renderDiscounts();
-            
-            console.log('All filters cleared - showing all discounts');
+            filterState.sort = this.value;
+            applyDiscountFilters();
         });
     }
-});
 
-const dropdownBubble = document.querySelector('.has-dropdown');
-const dropdown = document.querySelector('.dropdown-menu');
-
-if (dropdownBubble && dropdown) {
-    dropdownBubble.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const rect = this.getBoundingClientRect();
-        
-        // Position dropdown below the bubble
-        dropdown.style.top = (rect.bottom + 4) + 'px';
-        dropdown.style.left = rect.left + 'px';
-        
-        dropdown.classList.toggle('show');
-        this.classList.toggle('active');
-    });
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function() {
-        dropdown.classList.remove('show');
-        dropdownBubble.classList.remove('active');
-    });
-    
-    // Handle dropdown item selection
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.stopPropagation();
+    if (regionSelect) {
+        regionSelect.addEventListener('change', function() {
+            // Check if "Hamısı" (All) option is selected
+            if (this.value === 'all' || this.value === 'hamısı' || this.value === '') {
+                clearAllFilters();
+                return;
+            }
             
-            // Update selected state
-            document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
-            this.classList.add('selected');
+            const allDiscountsButton = document.querySelector('.filter-bubble[data-filter="all"]');
+            if (allDiscountsButton) {
+                allDiscountsButton.classList.remove('active');
+            }
             
-            // Update bubble text (preserve the icon) - SECURED
-            const bubbleTextNode = dropdownBubble.firstChild;
-            bubbleTextNode.textContent = this.textContent + ' ';
-            
-            // Update filter state
-            const selectedValue = this.getAttribute('data-value');
-            
-            // Map the data-value to actual location names in your JSON
+            // Map desktop dropdown values to mobile filter values
             const locationMap = {
                 'nizami': 'nizami',
                 '28-may': '28 may',
@@ -370,54 +348,167 @@ if (dropdownBubble && dropdown) {
                 'all': 'all'
             };
             
-            filterState.location = locationMap[selectedValue] || selectedValue;
-            
-            // Apply filters
+            filterState.location = locationMap[this.value] || this.value;
             applyDiscountFilters();
+        });
+    }
+
+    // ========================================================================
+    // MOBILE FILTER BUBBLES
+    // ========================================================================
+    
+    // Non-dropdown filter bubbles
+    document.querySelectorAll('.filter-bubble:not(.has-dropdown)').forEach(bubble => {
+        bubble.addEventListener('click', function() {
+            document.querySelectorAll('.filter-bubble:not(.has-dropdown)').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
             
-            // Close dropdown
-            dropdown.classList.remove('show');
-            dropdownBubble.classList.remove('active');
+            const filterType = this.getAttribute('data-filter');
+            filterState.sort = filterType;
             
-            console.log('Location filter selected:', filterState.location);
+            applyDiscountFilters();
+            console.log('Filter selected:', filterType);
         });
     });
 
-}
+    // "Bütün endirimlər" - clear all filters
+    document.querySelectorAll('.filter-bubble').forEach(bubble => {
+        const filterType = bubble.getAttribute('data-filter');
+        
+        if (filterType === 'all' || bubble.textContent.trim() === 'Bütün endirimlar') {
+            bubble.addEventListener('click', function() {
+                filterState.sort = null;
+                filterState.location = 'all';
+                selectedCategory = '';
+                searchTerm = '';
+                
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+                
+                document.querySelectorAll('.filter-bubble').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.category-item').forEach(c => c.classList.remove('active'));
+                document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                
+                const allAreasItem = document.querySelector('.dropdown-item[data-value="all"]');
+                if (allAreasItem) {
+                    allAreasItem.classList.add('selected');0
+                    const bubbleTextNode = dropdownBubble.firstChild;
+                    bubbleTextNode.textContent = 'Məkan ';
+                }
+                
+                this.classList.add('active');
+                
+                filteredDiscounts = [...allDiscounts];
+                visibleCount = 3;
+                renderDiscounts();
+                
+                console.log('All filters cleared - showing all discounts');
+            });
+        }
+    });
+
+    // ========================================================================
+    // DROPDOWN FILTER
+    // ========================================================================
     
-    // Close dropdown when clicking outside
+    const dropdownBubble = document.querySelector('.has-dropdown');
+    const dropdown = document.querySelector('.dropdown-menu');
+
+    if (dropdownBubble && dropdown) {
+        dropdownBubble.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const rect = this.getBoundingClientRect();
+            
+            dropdown.style.top = (rect.bottom + 4) + 'px';
+            dropdown.style.left = rect.left + 'px';
+            
+            dropdown.classList.toggle('show');
+            this.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            dropdown.classList.remove('show');
+            dropdownBubble.classList.remove('active');
+        });
+        
+        // Handle dropdown item selection
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                const bubbleTextNode = dropdownBubble.firstChild;
+                bubbleTextNode.textContent = this.textContent + ' ';
+                
+                const selectedValue = this.getAttribute('data-value');
+                
+                const locationMap = {
+                    'nizami': 'nizami',
+                    '28-may': '28 may',
+                    'nasimi': 'nəsimi',
+                    'narimanov': 'nərimanov',
+                    'inşaatçılar': 'İnşaatçılar mts.',
+                    'əhmədli': 'Əhmədli mts.',
+                    'gənclik': 'Gənclik mts.',
+                    'nəsimi': 'Nəsimi mts.',
+                    'içərişəhər': 'İçərişəhər mts.',
+                    'sahil': 'Sahil mts.',
+                    'all': 'all'
+                };
+                
+                filterState.location = locationMap[selectedValue] || selectedValue;
+                
+                applyDiscountFilters();
+                
+                dropdown.classList.remove('show');
+                dropdownBubble.classList.remove('active');
+                
+                console.log('Location filter selected:', filterState.location);
+            });
+        });
+    }
+    
+    // Additional dropdown close handlers
     document.addEventListener('click', function() {
         const dropdown = document.querySelector('.dropdown-menu');
         const bubble = document.querySelector('.has-dropdown');
-        dropdown.classList.remove('show');
-        bubble.classList.remove('active');
+        if (dropdown && bubble) {
+            dropdown.classList.remove('show');
+            bubble.classList.remove('active');
+        }
     });
     
-    // Handle dropdown item selection
     document.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.stopPropagation();
             
-            // Update selected state
             document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
             this.classList.add('selected');
             
-            // Update bubble text - SECURED
             const bubble = document.querySelector('.has-dropdown');
-            bubble.firstChild.textContent = this.textContent;
+            if (bubble) {
+                bubble.firstChild.textContent = this.textContent;
+            }
             
-            // Close dropdown
-            document.querySelector('.dropdown-menu').classList.remove('show');
-            bubble.classList.remove('active');
+            const dropdown = document.querySelector('.dropdown-menu');
+            if (dropdown && bubble) {
+                dropdown.classList.remove('show');
+                bubble.classList.remove('active');
+            }
         });
     });
 
-    // --- Discount logic ---
+    // ========================================================================
+    // DISCOUNT LOGIC - VARIABLES
+    // ========================================================================
+    
     const DISCOUNTS_URL = 'public/data/discounts.json';
     const discountsGrid = document.querySelector('.discounts-grid');
     const showMoreBtn = document.querySelector('.show-more-button');
-    const searchInput = document.querySelector('.search-container input');
-    
     const categoryItems = document.querySelectorAll('.category-item');
 
     let allDiscounts = [];
@@ -426,35 +517,10 @@ if (dropdownBubble && dropdown) {
     let selectedCategory = '';
     let searchTerm = '';
 
-    // Render Icon Based on Category 
-    function getCategoryIcon(category) {
-        const icons = {
-            geyim: "shopping-bag",
-            idman: "dumbbell",
-            kofe: "coffee",
-            kitab: "book-open",
-            texnologiya: "laptop",
-            tehsil: "school",
-            yemək: "hamburger"
-        };
-        return icons[category.toLowerCase()] || "tag"; // fallback icon
-    }
-
-    // Render Color Based on Category
-    function getCategoryClass(category) {
-        const classes = {
-          "geyim": "geyim",
-          "idman": "idman",
-          "kofe": "kofe",
-          "kitab": "kitab",
-          "texnologiya": "texnologiya",
-          "təhsil": "tehsil",
-          "yemək": "yemek",
-          "əyləncə": "eylence"
-        };
-        return classes[category.toLowerCase()] || "default-category";
-    }
-
+    // ========================================================================
+    // DISCOUNT RENDERING
+    // ========================================================================
+    
     // Fetch discounts
     if (discountsGrid) {
         fetch(DISCOUNTS_URL)
@@ -474,12 +540,13 @@ if (dropdownBubble && dropdown) {
         
         discountsGrid.innerHTML = '';
         const toShow = filteredDiscounts.slice(0, visibleCount);
+        
         toShow.forEach(discount => {
             const card = document.createElement('div');
             card.className = 'discount-card';
             card.setAttribute('data-modal-id', sanitizeText(discount.id));
             
-            // Create card structure securely
+            // Create card image
             const cardImage = document.createElement('div');
             cardImage.className = 'card-image';
             
@@ -487,7 +554,7 @@ if (dropdownBubble && dropdown) {
             img.src = sanitizeUrl(discount.image_url);
             img.alt = sanitizeText(discount.title);
             img.onerror = function() {
-                this.onerror = null; // prevent infinite loop
+                this.onerror = null;
                 this.src = `https://placehold.co/300x200?text=${encodeURIComponent(discount.title)}`;
             };
             
@@ -496,6 +563,7 @@ if (dropdownBubble && dropdown) {
             cardImage.appendChild(img);
             cardImage.appendChild(discountBadge);
             
+            // Create card content
             const cardContent = document.createElement('div');
             cardContent.className = 'card-content';
             
@@ -557,10 +625,9 @@ if (dropdownBubble && dropdown) {
             reqIconMobile.setAttribute('data-lucide', 'ticket');
             reqIconMobile.className = 'requirement-icon-mobile';
             
-            // Determine requirement text based on telebe+ property
             const requirementText = discount['telebe+'] === true ? 
-            'Tələbə+ kartı tələb olunur' : 
-            'Tələbə kartı tələb olunur';
+                'Tələbə+ kartı tələb olunur' : 
+                'Tələbə kartı tələb olunur';
 
             requirement.appendChild(reqIconDesktop);
             requirement.appendChild(reqIconMobile);
@@ -616,16 +683,18 @@ if (dropdownBubble && dropdown) {
         }
     }
 
-    function capitalize(str) {
-        return sanitizeText(str).charAt(0).toUpperCase() + sanitizeText(str).slice(1);
-    }
+    initializeDefaultSort()
 
-    // Filtering logic
+    // ========================================================================
+    // FILTERING LOGIC
+    // ========================================================================
+    
     function applyFilters() {
         const allDiscountsButton = document.querySelector('.filter-bubble[data-filter="all"]');
-if (allDiscountsButton) {
-    allDiscountsButton.classList.remove('active');
-}
+        if (allDiscountsButton) {
+            allDiscountsButton.classList.remove('active');
+        }
+        
         filteredDiscounts = allDiscounts.filter(discount => {
             const matchesCategory = !selectedCategory || discount.category === selectedCategory;
             const matchesSearch = !searchTerm ||
@@ -634,7 +703,6 @@ if (allDiscountsButton) {
             return matchesCategory && matchesSearch;
         });
         
-        // Only apply mobile filters if they are active
         if (filterState.sort || filterState.location !== 'all') {
             applyDiscountFilters();
         } else {
@@ -643,6 +711,11 @@ if (allDiscountsButton) {
         }
     }
 
+
+    // ========================================================================
+    // EVENT LISTENERS
+    // ========================================================================
+    
     // Show more button
     if (showMoreBtn) {
         showMoreBtn.addEventListener('click', function() {
@@ -651,7 +724,7 @@ if (allDiscountsButton) {
         });
     }
 
-    // Search
+    // Search input
     if (searchInput) {
         searchInput.addEventListener('input', function(e) {
             searchTerm = e.target.value.trim().toLowerCase();
@@ -659,21 +732,19 @@ if (allDiscountsButton) {
         });
     }
 
-    // Category filter (if clickable)
+    // Category filter
     categoryItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const clickedCategory = item.textContent.trim().toLowerCase();
             
-            
-                selectedCategory = clickedCategory;
-                categoryItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-            
+            selectedCategory = clickedCategory;
+            categoryItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
             
             applyFilters();
             
-            // Scroll to discounts section after filtering
+            // Scroll to discounts section
             const discountsSection = document.getElementById('discounts');
             if (discountsSection) {
                 discountsSection.scrollIntoView({ 
@@ -685,7 +756,10 @@ if (allDiscountsButton) {
     });
 });
 
-// Modal functionality - moved outside of DOMContentLoaded to avoid conflicts
+// ============================================================================
+// MODAL FUNCTIONALITY
+// ============================================================================
+
 document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('discountModal');
     
@@ -696,10 +770,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const closeBtn = modal.querySelector('.discount-modal-close');
     const modalImg = modal.querySelector('.discount-modal-img');
-
     let modalsData = null;
     
-    // Load modals data
+    // ========================================================================
+    // LOAD MODAL DATA
+    // ========================================================================
+    
     fetch('public/data/modals.json')
         .then(r => r.json())
         .then(data => { 
@@ -710,7 +786,29 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error loading modals data:', error);
         });
 
-    // SECURED modal filling function
+    // ========================================================================
+    // MODAL UTILITY FUNCTIONS
+    // ========================================================================
+    
+    function getContactIcon(type) {
+        const icons = {
+            phone: '📞',
+            website: '🌐',
+            email: '✉️',
+            address: '📍',
+            social: '📱',
+            whatsapp: '💬',
+            instagram: '📷',
+            facebook: '👥',
+            telegram: '✈️'
+        };
+        return icons[sanitizeText(type)] || '📞';
+    }
+
+    // ========================================================================
+    // MODAL FILL FUNCTION - SECURED
+    // ========================================================================
+    
     function fillModalFromData(modalData) {
         function getCategoryClass(category) {
             const classes = {
@@ -741,7 +839,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!modalData) return;
         
-        // Fill modal fields with null checks and sanitization
+        // Fill basic modal fields
         const modalImgEl = modal.querySelector('.discount-modal-img');
         const modalTitleEl = modal.querySelector('.discount-modal-title');
         const modalBadgeEl = modal.querySelector('.discount-modal-badge');
@@ -759,8 +857,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modalLocationEl) modalLocationEl.textContent = sanitizeText((modalData.locations && modalData.locations[0]) || '');
         if (modalStarEl) modalStarEl.textContent = '★';
         if (modalRatingEl) modalRatingEl.textContent = sanitizeText(modalData.rating);
-        if (modalReviewsEl) modalReviewsEl.textContent = '';
-        if (modalDescEl) modalDescEl.textContent = sanitizeText(modalData.desciption);
+        if (modalReviewsEl) modalReviewsEl.textContent = sanitizeText(modalData.reviews);
+        if (modalDescEl) modalDescEl.textContent = sanitizeText(modalData.description);
         if (modalNoteEl) modalNoteEl.textContent = sanitizeText(modalData['sub-description'] || '');
         if (modalMapEl) modalMapEl.src = sanitizeUrl(modalData.map_url);
         
@@ -770,9 +868,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const catTag = modal.querySelector('.discount-modal-category');
         if (catTag) {
             catTag.className = `discount-modal-category ${catClass}`;
-            
-            // Create category content securely
             catTag.innerHTML = '';
+            
             const categoryIcon = document.createElement('i');
             categoryIcon.className = 'tag-category-icon';
             categoryIcon.setAttribute('data-lucide', catIcon);
@@ -819,8 +916,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     link.textContent = sanitizeText(contact.value);
                     li.appendChild(link);
                 } else if (contact.type === 'phone') {
-                    // Continuing from where the first part left off...
-
                     const link = document.createElement('a');
                     link.href = `tel:${sanitizeText(contact.value)}`;
                     link.textContent = sanitizeText(contact.value);
@@ -856,22 +951,10 @@ document.addEventListener('DOMContentLoaded', function() {
         lucide.createIcons();
     }
 
-    function getContactIcon(type) {
-        const icons = {
-            phone: '📞',
-            website: '🌐',
-            email: '✉️',
-            address: '📍',
-            social: '📱',
-            whatsapp: '💬',
-            instagram: '📷',
-            facebook: '👥',
-            telegram: '✈️'
-        };
-        return icons[sanitizeText(type)] || '📞';
-    }
-
-    // SECURED modal opening function
+    // ========================================================================
+    // MODAL CONTROL FUNCTIONS
+    // ========================================================================
+    
     function openModal(imgSrc) {
         console.log('Opening modal with image:', imgSrc);
         if (imgSrc && modalImg) {
@@ -905,10 +988,13 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('=== MODAL CLOSED ===');
     }
 
-    // Store the default modal content for the featured card - SECURED
+    // ========================================================================
+    // DEFAULT MODAL CONTENT STORAGE - SECURED
+    // ========================================================================
+    
     const defaultModalContent = {};
     
-    // Populate default content if elements exist - SECURED
+    // Store default content elements
     const defaultImg = modal.querySelector('.discount-modal-img');
     const defaultTitle = modal.querySelector('.discount-modal-title');
     const defaultBadge = modal.querySelector('.discount-modal-badge');
@@ -924,11 +1010,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const defaultValidity = modal.querySelector('.discount-modal-validity-dates');
     const defaultBranches = modal.querySelector('.discount-modal-branches ul');
 
+    // Populate default content with sanitization
     if (defaultImg) defaultModalContent.img = sanitizeUrl(defaultImg.src);
     if (defaultTitle) defaultModalContent.title = sanitizeText(defaultTitle.textContent);
     if (defaultBadge) defaultModalContent.badge = sanitizeText(defaultBadge.textContent);
     if (defaultCategory) {
-        defaultModalContent.category = defaultCategory.innerHTML; // This contains icons, keep as is but validate on use
+        defaultModalContent.category = defaultCategory.innerHTML;
         defaultModalContent.categoryClass = sanitizeText(defaultCategory.className);
     }
     if (defaultLocation) defaultModalContent.location = sanitizeText(defaultLocation.textContent);
@@ -937,19 +1024,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (defaultReviews) defaultModalContent.reviews = sanitizeText(defaultReviews.textContent);
     if (defaultDesc) defaultModalContent.desc = sanitizeText(defaultDesc.textContent);
     if (defaultNote) defaultModalContent.note = sanitizeText(defaultNote.textContent);
-    if (defaultRules) defaultModalContent.rules = defaultRules.innerHTML; // Contains list structure, keep as is
-    if (defaultTags) defaultModalContent.tags = defaultTags.innerHTML; // Contains tag structure, keep as is
+    if (defaultRules) defaultModalContent.rules = defaultRules.innerHTML;
+    if (defaultTags) defaultModalContent.tags = defaultTags.innerHTML;
     if (defaultValidity) defaultModalContent.validity = sanitizeText(defaultValidity.textContent);
-    if (defaultBranches) defaultModalContent.branches = defaultBranches.innerHTML; // Contains list structure, keep as is
+    if (defaultBranches) defaultModalContent.branches = defaultBranches.innerHTML;
 
-    // SECURED modal reset function
+    // ========================================================================
+    // MODAL RESET FUNCTION - SECURED
+    // ========================================================================
+    
     function resetModalToDefault() {
         if (defaultImg && defaultModalContent.img) defaultImg.src = defaultModalContent.img;
         if (defaultTitle && defaultModalContent.title) defaultTitle.textContent = defaultModalContent.title;
         if (defaultBadge && defaultModalContent.badge) defaultBadge.textContent = defaultModalContent.badge;
         if (defaultCategory && defaultModalContent.category) {
             defaultCategory.className = defaultModalContent.categoryClass;
-            defaultCategory.innerHTML = defaultModalContent.category; // Pre-validated content
+            defaultCategory.innerHTML = defaultModalContent.category;
         }
         if (defaultLocation && defaultModalContent.location) defaultLocation.textContent = defaultModalContent.location;
         if (defaultStar && defaultModalContent.star) defaultStar.textContent = defaultModalContent.star;
@@ -957,14 +1047,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (defaultReviews && defaultModalContent.reviews) defaultReviews.textContent = defaultModalContent.reviews;
         if (defaultDesc && defaultModalContent.desc) defaultDesc.textContent = defaultModalContent.desc;
         if (defaultNote && defaultModalContent.note) defaultNote.textContent = defaultModalContent.note;
-        if (defaultRules && defaultModalContent.rules) defaultRules.innerHTML = defaultModalContent.rules; // Pre-validated content
-        if (defaultTags && defaultModalContent.tags) defaultTags.innerHTML = defaultModalContent.tags; // Pre-validated content
+        if (defaultRules && defaultModalContent.rules) defaultRules.innerHTML = defaultModalContent.rules;
+        if (defaultTags && defaultModalContent.tags) defaultTags.innerHTML = defaultModalContent.tags;
         if (defaultValidity && defaultModalContent.validity) defaultValidity.textContent = defaultModalContent.validity;
-        if (defaultBranches && defaultModalContent.branches) defaultBranches.innerHTML = defaultModalContent.branches; // Pre-validated content
+        if (defaultBranches && defaultModalContent.branches) defaultBranches.innerHTML = defaultModalContent.branches;
         lucide.createIcons();
     }
 
-    // SECURED event delegation for modal buttons
+    // ========================================================================
+    // MODAL EVENT HANDLERS
+    // ========================================================================
+    
+    // Event delegation for modal buttons - SECURED
     document.body.addEventListener('click', function(e) {
         console.log('Click detected on:', e.target);
         
@@ -998,7 +1092,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
-            // Otherwise, fallback to default (featured card)
+            // Fallback to default (featured card)
             resetModalToDefault();
             openModal(imgSrc);
         }
@@ -1009,7 +1103,10 @@ document.addEventListener('DOMContentLoaded', function() {
         closeBtn.addEventListener('click', closeModal);
     }
 
-    // Close modal on overlay click (but not when clicking inside the modal content or scrolling)
+    // ========================================================================
+    // MODAL SCROLL HANDLING
+    // ========================================================================
+    
     let isScrolling = false;
     let scrollTimeout;
     
@@ -1022,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     });
     
-    // Also track scrolling on modal content
+    // Track scrolling on modal content
     const modalContent = modal.querySelector('.discount-modal-card, .modal-content, .discount-modal');
     if (modalContent) {
         modalContent.addEventListener('scroll', function() {
@@ -1034,8 +1131,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Close modal on overlay click (but not when scrolling)
     modal.addEventListener('click', function(e) {
-        // Only close if clicking directly on the modal overlay (not inside content) and not scrolling
         if (e.target === modal && !isScrolling) {
             closeModal();
         }
@@ -1048,6 +1145,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// ============================================================================
+// FINAL INITIALIZATION
+// ============================================================================
 
 // Reinitialize icons after adding new content
 lucide.createIcons();
