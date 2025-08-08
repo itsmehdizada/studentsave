@@ -301,6 +301,11 @@ body {
     color: #5C3A28; /* dark mocha text for contrast */           
 }
 
+.diger{
+    background-color: #E0E0E0;
+    color: #212121;
+}
+
 /* Featured Section */
 .featured {
     padding: 1.5rem 0;
@@ -976,7 +981,7 @@ body {
 }
 
 .footer-column h3 {
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1rem 0;
     font-size: 1.25rem;
     font-weight: 600;
 }
@@ -1024,7 +1029,7 @@ body {
 /* Footer Bottom */
 .footer-bottom {
     text-align: center;
-    padding: 1.5rem;
+    padding: 1rem;
     color: #D1D5DB;
 }
 
@@ -1141,7 +1146,7 @@ body {
     /* Categories Mobile */
     .categories {
         padding: 0rem;
-        background: white;
+        background: transparent;
         border-radius: 1.25rem;
         margin: 0.5rem;
         box-shadow: 0;
@@ -1392,7 +1397,7 @@ body {
 
     .discounts-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0;
     }
 
     .discount-card {
@@ -1403,7 +1408,6 @@ body {
 
     .card-image {
         flex: 0 0 100px;
-        max-height: 140px;
         min-width: 110px;
         align-self: flex-start;
     }
@@ -1575,13 +1579,18 @@ body {
         grid-template-columns: 1fr;
 
     }
+
+    .footer-links, .footer-social{
+        display: none;
+    }
+
     
     .footer-column {
-        padding: 1.5rem;
+        padding: 1rem;
     }
     
     .footer-header {
-        padding: 1.5rem;
+        padding: 1rem;
     }
 
     .mobile-extra-info {
@@ -1627,17 +1636,59 @@ body {
     }
 
     .discount-card {
-        align-items: stretch;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch; /* This ensures both sides stretch to match height */
+        min-height: 140px; /* Minimum height for cards */
     }
+
     .card-image {
-        height: 100%;
-        align-self: stretch;
+        flex: 0 0 110px; /* Fixed width, no grow/shrink */
+        min-width: 110px;
+        height: auto; /* Remove fixed height */
+        align-self: stretch; /* Stretch to match parent height */
+        display: flex; /* Make it a flex container */
+        overflow: hidden;
+        border-radius: 0.75rem 0 0 0.75rem;
     }
+    
     .card-image img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 0.75rem 0 0 0.75rem;
+        height: 100%; /* Fill the entire container */
+        object-fit: cover; /* Maintain aspect ratio while covering */
+        object-position: center; /* Center the image */
+        flex: 1; /* Take up full space */
+        border-radius: 0; /* Remove border radius from img since container handles it */
+    }
+
+    .discount-card .card-content {
+        flex: 1;
+        padding: 0.5rem 1rem;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 0; /* Allow content to shrink if needed */
+    }
+
+    /* Ensure discount badge positions correctly on the stretched image */
+    .discount-card .discount-badge {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        padding: 0.1rem 0.5rem;
+        font-size: 0.75rem;
+        z-index: 2;
+    }
+
+    /* Additional fixes for very tall cards with lots of text */
+    .discount-card.tall-content {
+        min-height: 160px;
+    }
+
+    .discount-card.tall-content .card-image {
+        flex: 0 0 120px;
+        min-width: 120px;
     }
 
     
@@ -1656,6 +1707,23 @@ body {
 
     .featured-content {
         padding: 1.5rem;
+    }
+
+    .discount-card {
+        min-height: 120px;
+    }
+
+    .card-image {
+        min-width: 100px;
+    }
+
+    .discount-card.tall-content {
+        min-height: 140px;
+    }
+
+    .discount-card.tall-content .card-image {
+        flex: 0 0 110px;
+        min-width: 110px;
     }
 }
 
@@ -1688,7 +1756,6 @@ body {
     min-height: 340px;
     position: relative;
     z-index: 1;
-    border: 2px solid var(--footer-bg);
     transition: box-shadow 0.3s, border 0.3s, background 0.3s;
     margin-bottom: 4.5rem;
     display: flex;
@@ -1697,7 +1764,6 @@ body {
   }
   #progressiveSurveySection:focus-within, #progressiveSurveySection:hover {
     box-shadow: 0 20px 48px 0 rgba(59,130,246,0.18), 0 6px 24px 0 rgba(100,116,139,0.13);
-    border: 2px solid var(--footer-bg);
     background: linear-gradient(135deg, #f1f5f9 60%, #f5f5f8 100%);
   }
   .survey-container{
@@ -1804,7 +1870,7 @@ body {
     font-size: 1.13rem;
     font-weight: 700;
     cursor: pointer;
-    margin-top: 1.2rem;
+    margin-top: 0.2rem;
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 12px rgba(59,130,246,0.13);
     letter-spacing: 0.2px;
@@ -1886,7 +1952,7 @@ body {
     .survey-subtitle { font-size: 0.9rem; }
     .survey-question { font-size: 0.85rem; }
     .survey-input, .survey-radio, .survey-checkbox { font-size: 0.85rem; padding: 0.4rem 0.3rem; }
-    .survey-submit-btn { font-size: 0.85rem; padding: 0.5rem 0.7rem; }}
+    .survey-submit-btn { font-size: 0.85rem; padding: 0.75rem 0.7rem; }}
 
 /* ========================================
    DISCOUNT MODAL STYLES
@@ -2350,7 +2416,7 @@ body {
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        margin-bottom: 16px;
+        margin-bottom: 0;
         padding: 0;
     }
 
@@ -2438,7 +2504,7 @@ body {
     .discount-modal-note {
         font-size: 13px;
         padding: 10px 14px;
-        margin-bottom: 16px;
+        margin-bottom: 0;
         border-left-width: 3px;
     }
 
@@ -2485,7 +2551,7 @@ body {
     }
 
     .discount-modal-header {
-        height: 160px;
+        height: 180px;
     }
 
     .discount-modal-close {
@@ -2504,7 +2570,7 @@ body {
 
     .discount-modal-meta {
         gap: 8px;
-        margin-bottom: 14px;
+        margin-bottom: 0;
     }
 
     .discount-modal-category {
